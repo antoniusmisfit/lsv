@@ -22,10 +22,10 @@ svdir=$1
 
 list_service()
 {
-local srvname=$1
+local srvname="$(basename $svdir/$1)"
 local srvstat="$(cat $svdir/$srvname/supervise/stat)"
 local srvpid="$(cat $svdir/$srvname/supervise/pid)"
-echo "$(basename $srvdir/$srvname) $srvstat $srvpid"
+echo "$srvname $srvstat $srvpid"
 }
 
 for eachsrv in $(ls $svdir);do
