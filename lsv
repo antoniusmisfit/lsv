@@ -1,0 +1,33 @@
+#!/bin/sh
+
+#LSV: List all services within a specified runsvdir service directory.
+#License: GNU GPLv3 or later
+
+#charup='✔'
+#chardown='X'
+
+if (($#<1));then
+cat << EOF
+Usage: $0 [SVDIR]
+
+List all services within a specified runsvdir service directory.
+Each line follows the format: servicename status PID
+
+Note: For system services, $0 must be run as root to properly function.
+EOF
+exit
+fi
+
+svdir=$1
+
+list_service()
+{
+local srvname=$1
+local srvstat="$(cat $svdir/$srvname/supervise/stat)"
+local srvpid="$(cat $svdir/$srvname/supervise/pid)"
+echo "$(basename $srvdir/$srvname) $srvstat $srvpid"
+}
+
+for eachsrv in $(ls $svdir);do
+list_service $eachsrv
+done
