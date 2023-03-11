@@ -1,0 +1,36 @@
+#!/bin/sh
+
+#SVTREE: List runsvdir services in a pstree-like format
+#License: GNU GPLv3 or later
+
+#if (($#<1));then
+#cat << EOF
+#Usage: $0 [SVDIR]
+
+#List runsvdir services in a pstree-like format.
+
+#Note: For system services, $0 must be run as root to properly function.
+#EOF
+#exit
+#fi
+
+svdir=$1
+
+list_service()
+{
+local srvname="$(basename $svdir/$1)"
+local srvstat="$(cat $svdir/$srvname/supervise/stat)"
+local srvpid="$(cat $svdir/$srvname/supervise/pid)"
+echo "$srvname $srvstat $srvpid"
+}
+
+svtree_print()
+{
+printf "$1:"
+for eachsrv in $(ls $svdir);do
+printf "\n|--$(basename $eachsrv) ($(cat $1/$eachsrv/supervise/stat))"
+done
+printf "\n"
+}
+
+svtree_print $1
